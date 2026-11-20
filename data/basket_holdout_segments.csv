@@ -1,0 +1,5 @@
+﻿day_type,daypart,n,both,rate
+weekday,before noon,51,13,0.2549019607843137
+weekday,noon onward,147,38,0.2585034013605442
+weekend,before noon,49,6,0.12244897959183673
+weekend,noon onward,136,36,0.2647058823529412

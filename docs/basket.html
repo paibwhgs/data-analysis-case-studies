@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>购物车联购评审</title><style>
+html { color-scheme: light }
+body {
+  margin: 0;
+  background: #fff;
+  color: #212121;
+  font: 16px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.frame { max-width: 920px; padding: 0 28px; margin: 0 auto }
+.site-header { border-bottom: 1px solid #dededb }
+.site-header nav {
+  display: flex; gap: 18px; align-items: center; min-height: 51px;
+  padding: 8px 0; flex-wrap: wrap; font-size: 14px;
+}
+.site-header a { color: #555; text-underline-offset: 3px }
+.site-header a[aria-current=page] { color: #212121; font-weight: 650; text-decoration: none }
+.site-header .home { margin-right: auto; color: #212121; font-weight: 650 }
+main { padding-top: 24px; padding-bottom: 38px }
+.index h1 { font-size: 29px; margin: 0 0 10px }
+.index ul { margin: 0; padding-left: 19px }
+.index a { color: #303030; text-underline-offset: 3px }
+@media (max-width: 520px) {
+  .frame { padding: 0 17px }
+  .site-header nav { column-gap: 12px; row-gap: 4px }
+  .site-header .home { flex-basis: 100% }
+  main { padding-top: 18px }
+}
+@media print {
+  .frame { padding: 0 }
+  .site-header { display: none }
+}
+
+.memo {
+  --ink: #212121;
+  --muted: #5e5e5e;
+  --line: #dededb;
+  color: var(--ink);
+  font: 16px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.memo * { box-sizing: border-box }
+.memo h1,.memo h2,.memo h3 { color: var(--ink); line-height: 1.35; letter-spacing: normal }
+.memo h1 { font-size: clamp(29px, 4vw, 36px); font-weight: 700; margin: 0 0 8px }
+.memo h2 { font-size: 22px; font-weight: 650; margin: 0 0 8px }
+.memo h3 { font-size: 16px; font-weight: 640; margin: 0 0 9px }
+.memo p { margin: 0 0 10px }
+.memo a { color: #303030; text-decoration: underline; text-underline-offset: 3px }
+.memo a:focus-visible { outline: 2px solid #4b4b4b; outline-offset: 3px }
+.memo .meta { font-size: 14px; color: var(--muted) }
+.memo .meta-list { display: flex; flex-wrap: wrap; column-gap: 18px; padding: 0; margin: 0 0 16px; list-style: none }
+.memo .meta-list li { margin: 0 }
+.memo .decision { margin: 0 0 9px }
+.memo .scope { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums }
+.memo .report-section { padding-top: 19px; margin-top: 22px; border-top: 1px solid var(--line) }
+.memo .evidence { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; margin: 17px 0 }
+.memo figure { margin: 0; min-width: 0; padding: 0; break-inside: avoid }
+.memo figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.55 }
+.memo .bridge { display: flex; height: 10px; width: 100%; background: #ececea; margin: 13px 0 9px; overflow: hidden }
+.memo .bridge .mix { background: #adadaa }
+.memo .bridge .within { background: #4a4a48 }
+.memo .legend { display: grid; gap: 3px; font-size: 14px; font-variant-numeric: tabular-nums }
+.memo .legend > div { display: flex; justify-content: space-between; gap: 8px }
+.memo .legend span { color: var(--muted) }
+.memo .legend i { width: 8px; height: 8px; display: inline-block; margin-right: 6px; background: #adadaa }
+.memo .legend .in i { background: #4a4a48 }
+.memo .bars { margin-top: 9px; display: grid; gap: 6px }
+.memo .bar { display: grid; grid-template-columns: 85px minmax(16px, 1fr) 56px; gap: 8px; align-items: center; font-size: 14px }
+.memo .track { height: 6px; background: #ededeb; overflow: hidden }
+.memo .track span { height: 100%; display: block; background: #5c5c5a }
+.memo .bar b { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600 }
+.memo .table-scroll { overflow-x: auto }
+.memo table { font-size: 14px; line-height: 1.45; width: 100%; border: 0; border-collapse: collapse; margin: 3px 0 0; font-variant-numeric: tabular-nums }
+.memo th,.memo td { padding: 7px 8px; border: 0; border-bottom: 1px solid var(--line); vertical-align: top; text-align: right }
+.memo td:first-child,.memo th:first-child { text-align: left; padding-left: 0 }
+.memo td:last-child,.memo th:last-child { padding-right: 0 }
+.memo th { border-top: 1px solid #9a9a96; border-bottom: 1px solid #9a9a96; color: #383838; font-weight: 650; white-space: nowrap }
+.memo .narrative th,.memo .narrative td { text-align: left }
+.memo .narrative td:first-child { min-width: 85px }
+.memo figure .table-scroll table { font-size: 13px; margin-top: 5px }
+.memo figure th,.memo figure td { padding-top: 5px; padding-bottom: 5px }
+.memo .note { font-size: 14px; color: var(--muted); margin: 13px 0 7px }
+.memo .note p { margin: 0 0 5px }
+.memo .links { font-size: 14px; color: var(--muted); margin-top: 10px }
+@media (max-width: 700px) {
+  .memo .evidence { grid-template-columns: 1fr; gap: 17px }
+  .memo .table-scroll table { min-width: 400px }
+  .memo figure .table-scroll table { min-width: 310px }
+  .memo .table-scroll .narrative { min-width: 0 }
+}
+@media print {
+  .memo h2,.memo h3 { break-after: avoid }
+  .memo thead { display: table-header-group }
+  .memo tr { break-inside: avoid }
+}
+</style></head>
+<body><header class="site-header"><div class="frame">
+<nav aria-label="案例目录"><a class="home" href="index.html">数据分析案例</a><a href="youtube.html">YouTube 热榜复盘</a><a href="basket.html" aria-current="page">购物车联购评审</a></nav>
+</div></header><div class="frame"><main>
+<article class="memo" id="basket">
+  <header class="page-head">
+    <h1>购物车联购评审</h1>
+    <ul class="meta meta-list"><li>Bread Basket 线下门店订单</li><li>2016-10-30 至 2017-04-09</li><li>留出组起点 2017-02-18</li><li>实验待运行</li></ul>
+    <p class="decision"><b>结论</b>　先测试<b>加购蛋糕时推荐茶</b>。留出组 383 笔蛋糕单中有
+      93 笔同时买茶，联购率 <b>24.28%</b>，约为全体订单买茶率的
+      <b>1.73 倍</b>。另一个高 Lift 组合「热巧克力 → 蛋糕」只有 130 笔触发商品订单，适合作为后续备选。</p>
+    <p class="scope">有效订单 9465　·　留出订单 2899　·　后期 Lift &gt; 1 的规则 16/18 条　·　建议实验样本量 3337 人/组</p>
+  </header>
+  <section class="report-section">
+    <h2>早期找组合，后期检查规模与稳定性</h2>
+    <p>从 21293 条流水还原 9465 笔订单。早期组 6566 单，按共购量、置信度和 Lift 初筛，
+      再用后期 2899 单回测。表中保留一个后期 Lift 低于 1 的组合，便于看到筛选带来的变化。</p>
+    <div class="table-scroll" tabindex="0"><table><thead><tr><th scope="col">搭售方向</th><th scope="col">早期共购单</th><th scope="col">后期含触发商品单</th><th scope="col">后期共购单</th><th scope="col">后期联购率</th><th scope="col">后期 Lift</th></tr></thead><tbody><tr><td>蛋糕 → 茶</td><td>132</td><td>383</td><td>93</td><td>24.28%</td><td>1.73</td></tr><tr><td>吐司 → 咖啡</td><td>121</td><td>132</td><td>103</td><td>78.03%</td><td>1.56</td></tr><tr><td>热巧克力 → 蛋糕</td><td>70</td><td>130</td><td>38</td><td>29.23%</td><td>2.21</td></tr><tr><td>月牙面包 → 酥皮点心</td><td>80</td><td>96</td><td>7</td><td>7.29%</td><td>0.81</td></tr></tbody></table></div>
+    <div class="evidence">
+      <figure><h3>茶购买率基准</h3>
+        <div class="bars"><div class="bar"><span>全体订单</span><div class="track" aria-hidden="true"><span style="width:46.80%"></span></div><b>14.04%</b></div><div class="bar"><span>含蛋糕订单</span><div class="track" aria-hidden="true"><span style="width:80.94%"></span></div><b>24.28%</b></div></div>
+        <figcaption>同一后期样本。含蛋糕订单联购率的 Wilson 95% 区间为 20.26% 至 28.82%。</figcaption></figure>
+      <figure><h3>蛋糕与茶的时段分布</h3>
+        <div class="table-scroll" tabindex="0"><table><thead><tr><th scope="col">时段</th><th scope="col">含蛋糕单</th><th scope="col">共购单</th><th scope="col">联购率</th></tr></thead><tbody><tr><td>工作日午前</td><td>51</td><td>13</td><td>25.49%</td></tr><tr><td>工作日12 点起</td><td>147</td><td>38</td><td>25.85%</td></tr><tr><td>周末午前</td><td>49</td><td>6</td><td>12.24%</td></tr><tr><td>周末12 点起</td><td>136</td><td>36</td><td>26.47%</td></tr></tbody></table></div>
+        <figcaption>周末午前分母只有 49 单，暂不据此设置单独的时段策略。</figcaption></figure>
+    </div>
+  </section>
+  <section class="report-section">
+    <h2>实验设计与上线决策</h2>
+    <div class="table-scroll" tabindex="0"><table class="narrative"><thead><tr><th scope="col">环节</th><th scope="col">设计</th></tr></thead><tbody><tr><td>资格与分流</td><td>用户首次加购蛋糕、茶可售且购物车中没有茶时进入实验。按用户 ID 固定 1:1 随机分流。</td></tr><tr><td>对照组与实验组</td><td>对照组沿用原推荐位；实验组在同一位置展示茶。两组记录资格、分流、曝光与支付事件。</td></tr><tr><td>主指标</td><td>从触发起 24 小时内购买茶的用户数 ÷ 所有纳入分流的用户数。按随机分组分析。</td></tr><tr><td>护栏与质量</td><td>护栏为支付转化率、每位分流用户毛利及退款率。启动前写明可接受的下降幅度；先查样本比例失衡和埋点完备性。</td></tr><tr><td>上线与复盘</td><td>分流质量过关，主指标置信区间支持正向增量、各项护栏通过时，考虑逐步放量。证据不足则保留现状并复盘。</td></tr></tbody></table></div>
+    <div class="note"><p><b>样本估算</b>　以历史完单联购率 24.28% 作演示基线，最小可检测差异 3 个百分点，双侧 α=0.05、功效 80%，约需每组 3337 人。排期应覆盖完整周周期。</p>
+      <p><b>证据边界</b>　门店历史数据提供候选排序，缺少未成交购物车、曝光和毛利记录。上线前用触发人群实际购买率重算样本，同时按护栏所需样本量取更大的值。</p></div>
+    <p class="links"><a href="https://www.kaggle.com/code/xvivancos/market-basket-analysis">Kaggle 项目参考</a> · <a href="https://github.com/luis-alarcon/Kaggle_BreadBasket/blob/master/dataset/BreadBasket_DMS.csv">订单数据公开镜像</a> · <a href="https://engineering.atspotify.com/2024/3/risk-aware-product-decisions-in-a-b-tests-with-multiple-metrics">上线决策参考 · Spotify</a> · <a href="https://www.microsoft.com/en-us/research/articles/diagnosing-sample-ratio-mismatch-in-a-b-testing/">分流检查参考 · Microsoft</a></p>
+  </section>
+</article></main></div></body></html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据分析案例</title><style>
+html { color-scheme: light }
+body {
+  margin: 0;
+  background: #fff;
+  color: #212121;
+  font: 16px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.frame { max-width: 920px; padding: 0 28px; margin: 0 auto }
+.site-header { border-bottom: 1px solid #dededb }
+.site-header nav {
+  display: flex; gap: 18px; align-items: center; min-height: 51px;
+  padding: 8px 0; flex-wrap: wrap; font-size: 14px;
+}
+.site-header a { color: #555; text-underline-offset: 3px }
+.site-header a[aria-current=page] { color: #212121; font-weight: 650; text-decoration: none }
+.site-header .home { margin-right: auto; color: #212121; font-weight: 650 }
+main { padding-top: 24px; padding-bottom: 38px }
+.index h1 { font-size: 29px; margin: 0 0 10px }
+.index ul { margin: 0; padding-left: 19px }
+.index a { color: #303030; text-underline-offset: 3px }
+@media (max-width: 520px) {
+  .frame { padding: 0 17px }
+  .site-header nav { column-gap: 12px; row-gap: 4px }
+  .site-header .home { flex-basis: 100% }
+  main { padding-top: 18px }
+}
+@media print {
+  .frame { padding: 0 }
+  .site-header { display: none }
+}
+
+.memo {
+  --ink: #212121;
+  --muted: #5e5e5e;
+  --line: #dededb;
+  color: var(--ink);
+  font: 16px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.memo * { box-sizing: border-box }
+.memo h1,.memo h2,.memo h3 { color: var(--ink); line-height: 1.35; letter-spacing: normal }
+.memo h1 { font-size: clamp(29px, 4vw, 36px); font-weight: 700; margin: 0 0 8px }
+.memo h2 { font-size: 22px; font-weight: 650; margin: 0 0 8px }
+.memo h3 { font-size: 16px; font-weight: 640; margin: 0 0 9px }
+.memo p { margin: 0 0 10px }
+.memo a { color: #303030; text-decoration: underline; text-underline-offset: 3px }
+.memo a:focus-visible { outline: 2px solid #4b4b4b; outline-offset: 3px }
+.memo .meta { font-size: 14px; color: var(--muted) }
+.memo .meta-list { display: flex; flex-wrap: wrap; column-gap: 18px; padding: 0; margin: 0 0 16px; list-style: none }
+.memo .meta-list li { margin: 0 }
+.memo .decision { margin: 0 0 9px }
+.memo .scope { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums }
+.memo .report-section { padding-top: 19px; margin-top: 22px; border-top: 1px solid var(--line) }
+.memo .evidence { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; margin: 17px 0 }
+.memo figure { margin: 0; min-width: 0; padding: 0; break-inside: avoid }
+.memo figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.55 }
+.memo .bridge { display: flex; height: 10px; width: 100%; background: #ececea; margin: 13px 0 9px; overflow: hidden }
+.memo .bridge .mix { background: #adadaa }
+.memo .bridge .within { background: #4a4a48 }
+.memo .legend { display: grid; gap: 3px; font-size: 14px; font-variant-numeric: tabular-nums }
+.memo .legend > div { display: flex; justify-content: space-between; gap: 8px }
+.memo .legend span { color: var(--muted) }
+.memo .legend i { width: 8px; height: 8px; display: inline-block; margin-right: 6px; background: #adadaa }
+.memo .legend .in i { background: #4a4a48 }
+.memo .bars { margin-top: 9px; display: grid; gap: 6px }
+.memo .bar { display: grid; grid-template-columns: 85px minmax(16px, 1fr) 56px; gap: 8px; align-items: center; font-size: 14px }
+.memo .track { height: 6px; background: #ededeb; overflow: hidden }
+.memo .track span { height: 100%; display: block; background: #5c5c5a }
+.memo .bar b { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600 }
+.memo .table-scroll { overflow-x: auto }
+.memo table { font-size: 14px; line-height: 1.45; width: 100%; border: 0; border-collapse: collapse; margin: 3px 0 0; font-variant-numeric: tabular-nums }
+.memo th,.memo td { padding: 7px 8px; border: 0; border-bottom: 1px solid var(--line); vertical-align: top; text-align: right }
+.memo td:first-child,.memo th:first-child { text-align: left; padding-left: 0 }
+.memo td:last-child,.memo th:last-child { padding-right: 0 }
+.memo th { border-top: 1px solid #9a9a96; border-bottom: 1px solid #9a9a96; color: #383838; font-weight: 650; white-space: nowrap }
+.memo .narrative th,.memo .narrative td { text-align: left }
+.memo .narrative td:first-child { min-width: 85px }
+.memo figure .table-scroll table { font-size: 13px; margin-top: 5px }
+.memo figure th,.memo figure td { padding-top: 5px; padding-bottom: 5px }
+.memo .note { font-size: 14px; color: var(--muted); margin: 13px 0 7px }
+.memo .note p { margin: 0 0 5px }
+.memo .links { font-size: 14px; color: var(--muted); margin-top: 10px }
+@media (max-width: 700px) {
+  .memo .evidence { grid-template-columns: 1fr; gap: 17px }
+  .memo .table-scroll table { min-width: 400px }
+  .memo figure .table-scroll table { min-width: 310px }
+  .memo .table-scroll .narrative { min-width: 0 }
+}
+@media print {
+  .memo h2,.memo h3 { break-after: avoid }
+  .memo thead { display: table-header-group }
+  .memo tr { break-inside: avoid }
+}
+</style><script>
+const pages = {youtube: "youtube.html", basket: "basket.html"};
+const target = pages[location.hash.slice(1)];
+if (typeof target === "string") location.replace(target);
+</script></head>
+<body><header class="site-header"><div class="frame">
+<nav aria-label="案例目录"><a class="home" href="index.html">数据分析案例</a><a href="youtube.html">YouTube 热榜复盘</a><a href="basket.html">购物车联购评审</a></nav>
+</div></header><div class="frame"><main><section class="index"><h1>数据分析案例</h1><ul><li><a href="youtube.html">YouTube 热榜复盘</a></li><li><a href="basket.html">购物车联购评审</a></li></ul></section></main></div></body></html>

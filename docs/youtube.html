@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YouTube 热榜复盘</title><style>
+html { color-scheme: light }
+body {
+  margin: 0;
+  background: #fff;
+  color: #212121;
+  font: 16px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.frame { max-width: 920px; padding: 0 28px; margin: 0 auto }
+.site-header { border-bottom: 1px solid #dededb }
+.site-header nav {
+  display: flex; gap: 18px; align-items: center; min-height: 51px;
+  padding: 8px 0; flex-wrap: wrap; font-size: 14px;
+}
+.site-header a { color: #555; text-underline-offset: 3px }
+.site-header a[aria-current=page] { color: #212121; font-weight: 650; text-decoration: none }
+.site-header .home { margin-right: auto; color: #212121; font-weight: 650 }
+main { padding-top: 24px; padding-bottom: 38px }
+.index h1 { font-size: 29px; margin: 0 0 10px }
+.index ul { margin: 0; padding-left: 19px }
+.index a { color: #303030; text-underline-offset: 3px }
+@media (max-width: 520px) {
+  .frame { padding: 0 17px }
+  .site-header nav { column-gap: 12px; row-gap: 4px }
+  .site-header .home { flex-basis: 100% }
+  main { padding-top: 18px }
+}
+@media print {
+  .frame { padding: 0 }
+  .site-header { display: none }
+}
+
+.memo {
+  --ink: #212121;
+  --muted: #5e5e5e;
+  --line: #dededb;
+  color: var(--ink);
+  font: 16px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.memo * { box-sizing: border-box }
+.memo h1,.memo h2,.memo h3 { color: var(--ink); line-height: 1.35; letter-spacing: normal }
+.memo h1 { font-size: clamp(29px, 4vw, 36px); font-weight: 700; margin: 0 0 8px }
+.memo h2 { font-size: 22px; font-weight: 650; margin: 0 0 8px }
+.memo h3 { font-size: 16px; font-weight: 640; margin: 0 0 9px }
+.memo p { margin: 0 0 10px }
+.memo a { color: #303030; text-decoration: underline; text-underline-offset: 3px }
+.memo a:focus-visible { outline: 2px solid #4b4b4b; outline-offset: 3px }
+.memo .meta { font-size: 14px; color: var(--muted) }
+.memo .meta-list { display: flex; flex-wrap: wrap; column-gap: 18px; padding: 0; margin: 0 0 16px; list-style: none }
+.memo .meta-list li { margin: 0 }
+.memo .decision { margin: 0 0 9px }
+.memo .scope { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums }
+.memo .report-section { padding-top: 19px; margin-top: 22px; border-top: 1px solid var(--line) }
+.memo .evidence { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; margin: 17px 0 }
+.memo figure { margin: 0; min-width: 0; padding: 0; break-inside: avoid }
+.memo figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.55 }
+.memo .bridge { display: flex; height: 10px; width: 100%; background: #ececea; margin: 13px 0 9px; overflow: hidden }
+.memo .bridge .mix { background: #adadaa }
+.memo .bridge .within { background: #4a4a48 }
+.memo .legend { display: grid; gap: 3px; font-size: 14px; font-variant-numeric: tabular-nums }
+.memo .legend > div { display: flex; justify-content: space-between; gap: 8px }
+.memo .legend span { color: var(--muted) }
+.memo .legend i { width: 8px; height: 8px; display: inline-block; margin-right: 6px; background: #adadaa }
+.memo .legend .in i { background: #4a4a48 }
+.memo .bars { margin-top: 9px; display: grid; gap: 6px }
+.memo .bar { display: grid; grid-template-columns: 85px minmax(16px, 1fr) 56px; gap: 8px; align-items: center; font-size: 14px }
+.memo .track { height: 6px; background: #ededeb; overflow: hidden }
+.memo .track span { height: 100%; display: block; background: #5c5c5a }
+.memo .bar b { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600 }
+.memo .table-scroll { overflow-x: auto }
+.memo table { font-size: 14px; line-height: 1.45; width: 100%; border: 0; border-collapse: collapse; margin: 3px 0 0; font-variant-numeric: tabular-nums }
+.memo th,.memo td { padding: 7px 8px; border: 0; border-bottom: 1px solid var(--line); vertical-align: top; text-align: right }
+.memo td:first-child,.memo th:first-child { text-align: left; padding-left: 0 }
+.memo td:last-child,.memo th:last-child { padding-right: 0 }
+.memo th { border-top: 1px solid #9a9a96; border-bottom: 1px solid #9a9a96; color: #383838; font-weight: 650; white-space: nowrap }
+.memo .narrative th,.memo .narrative td { text-align: left }
+.memo .narrative td:first-child { min-width: 85px }
+.memo figure .table-scroll table { font-size: 13px; margin-top: 5px }
+.memo figure th,.memo figure td { padding-top: 5px; padding-bottom: 5px }
+.memo .note { font-size: 14px; color: var(--muted); margin: 13px 0 7px }
+.memo .note p { margin: 0 0 5px }
+.memo .links { font-size: 14px; color: var(--muted); margin-top: 10px }
+@media (max-width: 700px) {
+  .memo .evidence { grid-template-columns: 1fr; gap: 17px }
+  .memo .table-scroll table { min-width: 400px }
+  .memo figure .table-scroll table { min-width: 310px }
+  .memo .table-scroll .narrative { min-width: 0 }
+}
+@media print {
+  .memo h2,.memo h3 { break-after: avoid }
+  .memo thead { display: table-header-group }
+  .memo tr { break-inside: avoid }
+}
+</style></head>
+<body><header class="site-header"><div class="frame">
+<nav aria-label="案例目录"><a class="home" href="index.html">数据分析案例</a><a href="youtube.html" aria-current="page">YouTube 热榜复盘</a><a href="basket.html">购物车联购评审</a></nav>
+</div></header><div class="frame"><main>
+<article class="memo" id="youtube">
+  <header class="page-head">
+    <h1>YouTube 热榜复盘</h1>
+    <ul class="meta meta-list"><li>YouTube 美国区历史热榜</li><li>2017-11-14 至 2018-06-14</li><li>分组日期 2018-01-30</li></ul>
+    <p class="decision"><b>结论</b>　复上榜率从 <b>78.85%</b> 升至 <b>85.15%</b>。
+      约 <b>98%</b> 的增幅来自类目内部变化。先回查娱乐、教程与风格和喜剧的频道与发布时间分布，等证据齐备后再决定是否调整类目配比。</p>
+    <p class="scope">原始日榜记录 40949　·　去重后视频日 40899　·　纳入分析的视频 5715　·　整体变化 +6.31 个百分点</p>
+  </header>
+  <section class="report-section">
+    <h2>类目内部贡献 +6.16 个百分点</h2>
+    <p>如果类目表现停留在前段、只换成后段的类目占比，整体只会到 <b>79.00%</b>。剩下的差值才归入类目内部变化。</p>
+    <div class="evidence">
+      <figure><h3>整体变化拆解</h3>
+      <div class="bridge" aria-label="类目结构项 +0.15 个百分点。类目内项 +6.16 个百分点">
+        <div class="mix" style="width:2.357%"></div>
+        <div class="within" style="width:97.643%"></div>
+      </div>
+      <div class="legend">
+        <div><span><i></i>类目结构变化</span><b>+0.15 个百分点</b></div>
+        <div class="in"><span><i></i>类目内表现变化</span><b>+6.16 个百分点</b></div>
+      </div>
+        <figcaption>前段实际 78.85% → 只改变类目权重 79.00% → 后段实际 85.15%。分项按各自精度四舍五入。</figcaption></figure>
+      <figure><h3>类目内贡献前五</h3>
+        <div class="bars"><div class="bar"><span>娱乐</span><div class="track" aria-hidden="true"><span style="width:89.04%"></span></div><b>+1.51</b></div><div class="bar"><span>教程与风格</span><div class="track" aria-hidden="true"><span style="width:67.13%"></span></div><b>+1.14</b></div><div class="bar"><span>喜剧</span><div class="track" aria-hidden="true"><span style="width:46.62%"></span></div><b>+0.79</b></div><div class="bar"><span>科技</span><div class="track" aria-hidden="true"><span style="width:38.30%"></span></div><b>+0.65</b></div><div class="bar"><span>新闻与政治</span><div class="track" aria-hidden="true"><span style="width:28.81%"></span></div><b>+0.49</b></div></div>
+        <figcaption>单位为百分点。类目贡献 = 后段样本占比 × 类目复上榜率变化。</figcaption></figure>
+    </div>
+    <p>娱乐是首要排查对象，类目内增幅约 +5.68 个百分点，但后段样本占比较高。
+      教程与风格自身提升更大。前三类合计贡献 <b>+3.45 个百分点</b>，占类目内项 56%。</p>
+    <div class="table-scroll" tabindex="0"><table><thead><tr><th scope="col">类目</th><th scope="col">前段样本</th><th scope="col">后段样本</th><th scope="col">前段复上榜率</th><th scope="col">后段复上榜率</th><th scope="col">类目内贡献（百分点）</th></tr></thead><tbody><tr><td>娱乐</td><td>702</td><td>768</td><td>74.79%</td><td>80.47%</td><td>+1.51</td></tr><tr><td>教程与风格</td><td>273</td><td>267</td><td>81.68%</td><td>94.01%</td><td>+1.14</td></tr><tr><td>喜剧</td><td>258</td><td>235</td><td>73.26%</td><td>82.98%</td><td>+0.79</td></tr><tr><td>科技</td><td>159</td><td>186</td><td>78.62%</td><td>88.71%</td><td>+0.65</td></tr><tr><td>新闻与政治</td><td>268</td><td>195</td><td>68.66%</td><td>75.90%</td><td>+0.49</td></tr><tr><td>影视与动画</td><td>141</td><td>142</td><td>85.82%</td><td>92.96%</td><td>+0.35</td></tr></tbody></table></div>
+  </section>
+  <section class="report-section">
+    <h2>排查顺序与证据要求</h2>
+    <div class="table-scroll" tabindex="0"><table class="narrative"><thead><tr><th scope="col">先查什么</th><th scope="col">看哪些数据</th><th scope="col">怎样解释</th></tr></thead><tbody><tr><td>采集口径</td><td>日榜采集日志、每日覆盖条数、类目映射版本</td><td>先排除采集覆盖或映射变化造成的观测偏差。</td></tr><tr><td>头部频道与发布节奏</td><td>频道 ID、首次上榜前的视频年龄、周内分布</td><td>按频道和发布时间分层；比较剔除头部频道后的差值。</td></tr><tr><td>分发机制</td><td>推荐曝光、榜单规则变更记录、端和地区</td><td>若与明确变更重合，再用随机对照或可比流量验证机制。</td></tr></tbody></table></div>
+    <div class="note"><p><b>指标口径</b>　视频在样本中首见起 7 个自然日内至少 3 天在榜，首见当天计入。
+      排除样本首日及观察窗缺报的记录，前段 2832 个、后段 2883 个视频。任一时段样本不足 30 个的类目合并为「其他」。</p>
+      <p><b>分析边界</b>　样本来自榜单，能比较上榜视频的持续表现。曝光、受众和策略效果需要平台侧数据验证。</p></div>
+    <p class="links"><a href="https://www.kaggle.com/datasets/datasnaek/youtube-new">公开日榜数据</a> · <a href="https://www.kaggle.com/code/ammar111/youtube-trending-videos-analysis">Kaggle 项目参考</a> · <a href="https://www.uber.com/us/en/blog/argos-real-time-alerts/">排查思路参考 · Uber Argos</a></p>
+  </section>
+</article></main></div></body></html>
